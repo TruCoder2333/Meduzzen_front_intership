@@ -1,10 +1,12 @@
-FROM node:14 as build
+FROM node:19.5.0-alpine as build
 
 WORKDIR /app
 
 COPY package*.json ./
 
 RUN npm install
+
+RUN npm install vue-router
 
 COPY . .
 
