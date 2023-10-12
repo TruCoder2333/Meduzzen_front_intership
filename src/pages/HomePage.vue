@@ -24,7 +24,6 @@ export default {
   },
   methods: {
     openModal() {
-      console.log('Opening modal...'); 
       this.isModalVisible = true;
     },
     closeModal() {

@@ -1,39 +1,38 @@
 <template>
     <nav>
-        <ul>
-            <li><router-link to="/about/">About</router-link></li>
-            <li><router-link to="/registration/">Sign-Up</router-link></li>
-            <li><router-link to="/auth/">Sign-In</router-link></li>
-            <li><router-link to="/users/">All Users</router-link></li>
-            <li><router-link to="/user/">Your profile</router-link></li>
-            <li><router-link to="/company/">Company profile</router-link></li>
-            <li><router-link to="/companies/">All companies</router-link></li>
-        </ul>
+        <router-link v-for="link in links" :key="link" :to="`/${snakeCase(link)}`" class="nav-link">{{ link }}</router-link>
     </nav>
 </template>
 
 <script>
+
 export default {
     name: 'NavBar',
+    data() {
+    return {
+      links: ['About',
+             'Sign Up', 
+             'Sign In', 
+             'All Users', 
+             'User Profile', 
+             'Company Profile', 
+             'All Companies'],
+      snakeCase: null
+    };
+  },
+    created() {
+        import('lodash/snakeCase').then(module => {
+        this.snakeCase = module.default;
+    });
+  }
 };
 </script>
 
 <style scoped>
 
-nav {
-    background-color: #ffffff;
-    color: rgb(0, 0, 0);
+.nav-link {
+  margin-right: 10px; 
+  display: flex;
 }
-ul {
-    list-style-type: none;
-    padding: 0;
-}
-li {
-    display: inline-block;
-    margin-right: 10px;
-}
-a {
-    color: rgb(0, 0, 0);
-    text-decoration: none;
-}
+
 </style>

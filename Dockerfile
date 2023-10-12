@@ -8,6 +8,8 @@ RUN npm install
 
 RUN npm install vue-router
 
+RUN npm install lodash
+
 COPY . .
 
 RUN npm run build

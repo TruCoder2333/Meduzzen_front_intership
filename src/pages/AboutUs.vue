@@ -5,9 +5,3 @@
     <router-link to="/">Back to Home</router-link>
   </div>
 </template>
-
-<style>
-.black-text {
-  color: black;
-}
-</style>

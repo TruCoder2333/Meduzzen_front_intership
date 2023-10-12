@@ -1,25 +1,17 @@
 import { createApp } from 'vue';
 import { createRouter, createWebHashHistory} from 'vue-router';
-import AboutUs            from './pages/AboutUs.vue';
-import HomePage           from './pages/HomePage.vue';
-import UserRegistration   from './pages/UserRegistration.vue';
-import UserAuthentication from './pages/UserAuthentication.vue';
-import UserList           from './pages/UserList.vue';
-import UserProfile        from './pages/UserProfile.vue';
-import CompanyProfile     from './pages/CompanyProfile.vue'
-import CompanyList        from './pages/CompanyList.vue'
-import App                from './App.vue'
+import App from './App.vue'
 
 
 const routes = [
-    { path: '/',                 component: HomePage          },
-    { path: '/about/',           component: AboutUs           },
-    { path: '/registration/',    component: UserRegistration  },
-    { path: '/auth/',            component: UserAuthentication},
-    { path: '/users/',           component: UserList          },
-    { path: '/user/',            component: UserProfile       },
-    { path: '/company/',         component: CompanyProfile    },
-    { path: '/companies/',       component: CompanyList       },
+  { path: '/', component: () => import('./pages/HomePage.vue') },
+  { path: '/about/', component: () => import('./pages/AboutUs.vue') },
+  { path: '/sign_up/', component: () => import('./pages/UserRegistration.vue') },
+  { path: '/sign_in/', component: () => import('./pages/UserAuthentication.vue') },
+  { path: '/all_users/', component: () => import('./pages/UserList.vue') },
+  { path: '/user_profile/', component: () => import('./pages/UserProfile.vue') },
+  { path: '/company_profile/', component: () => import('./pages/CompanyProfile.vue') },
+  { path: '/all_companies/', component: () => import('./pages/CompanyList.vue') },
 ];
 
 const router = createRouter({
