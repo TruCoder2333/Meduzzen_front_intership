@@ -1,7 +1,18 @@
 <template>
   <div>
     <img src="/app/src/assets/logo.png" alt="Medduzen Logo" />
-    <p class="black-text">Medduzen Bambam</p>
-    <router-link to="/">Back to Home</router-link>
+    <p class="black-text">{{ $t('info') }}</p>
+    <router-link to="/">{{ $t('home_link') }}</router-link>
   </div>
 </template>
+
+<script>
+export default {
+  data() {
+    return {
+      selectedLanguage: "en",
+    };
+  },
+};
+
+</script>

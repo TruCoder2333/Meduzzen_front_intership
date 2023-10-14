@@ -4,6 +4,10 @@
     <header>
       <NavBar />
     </header>
+    <select v-model="selectedLanguage">
+            <option value="en">English</option>
+            <option value="ua">Українська</option>
+    </select>
     <footer>
       <p>&copy; 2023 My Vue App</p>
     </footer>
@@ -12,12 +16,27 @@
   
 <script>
 import NavBar from '/app/src/components/NavBar.vue' 
+import store from './store/store'
 
 export default {
-    components: {
+  data() {
+    return {
+      selectedLanguage: "en",
+    };
+  },
+  
+  components: {
       NavBar,
     },
+  watch: {
+    selectedLanguage(newLang) {
+      this.$i18n.locale = newLang;
+      store.commit('setLocale', newLang)
+    },
+  },
+  
   };
+
   </script>
   
   <style>

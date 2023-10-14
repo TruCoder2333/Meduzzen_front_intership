@@ -1,7 +1,18 @@
 <template>
     <div>
-        <h1>User Registration Page</h1>
+        <h1>{{ $t('signUp') }}</h1>
 
-        <router-link to="/">Back to Home</router-link>
+        <router-link to="/">{{ $t('home_link') }}</router-link>
     </div>
 </template>
+
+<script>
+export default {
+    data() {
+      return {
+        selectedLanguage: "en",
+      };
+    },
+};
+
+</script>

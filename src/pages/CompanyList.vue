@@ -1,7 +1,17 @@
 <template>
     <div>
-        <h1>Company List Page</h1>
+        <h1>{{ $t('allCompanies') }}</h1>
 
-        <router-link to="/">Back to Home</router-link>
+        <router-link to="/">{{ $t('home_link') }}</router-link>
     </div>
 </template>
+
+<script>
+export default {
+  data() {
+    return {
+      selectedLanguage: "en",
+    };
+  },
+};
+</script>

@@ -10,6 +10,10 @@ RUN npm install vue-router
 
 RUN npm install lodash
 
+RUN npm install vue-i18n
+
+RUN npm install vuex@next --save
+
 COPY . .
 
 RUN npm run build
