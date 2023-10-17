@@ -14,6 +14,8 @@ RUN npm install vue-i18n
 
 RUN npm install vuex@next --save
 
+RUN npm install axios
+
 COPY . .
 
 RUN npm run build

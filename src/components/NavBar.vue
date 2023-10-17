@@ -1,6 +1,8 @@
 <template>
     <nav>
-        <router-link v-for="link in links" :key="link" :to="`/${snakeCase(link)}`" class="nav-link">{{ $t(link) }}</router-link>
+        <router-link v-for = "link in links" :key = "link" :to = "`/${snakeCase(link)}`" class="nav-link">
+          {{ $t(link) }}
+        </router-link>
     </nav>
 </template>
 
@@ -18,11 +20,10 @@ export default {
              'companyProfile', 
              'allCompanies'],
       snakeCase: null,
-      selectedLanguage: "en",
     };
   },
     created() {
-        import('lodash/snakeCase').then(module => {
+        import("lodash/snakeCase").then(module => {
         this.snakeCase = module.default;
     });
   },

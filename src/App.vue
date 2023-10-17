@@ -8,6 +8,9 @@
             <option value="en">English</option>
             <option value="ua">Українська</option>
     </select>
+    <p>{{ getTestString }}</p>
+    <button @click="changeTestString">Change Test String</button>
+
     <footer>
       <p>&copy; 2023 My Vue App</p>
     </footer>
@@ -17,11 +20,12 @@
 <script>
 import NavBar from '/app/src/components/NavBar.vue' 
 import store from './store/store'
+import { mapGetters, mapActions } from 'vuex';
 
 export default {
   data() {
     return {
-      selectedLanguage: "en",
+      selectedLanguage: store.state.locale,
     };
   },
   
@@ -34,7 +38,15 @@ export default {
       store.commit('setLocale', newLang)
     },
   },
-  
+  computed: {
+    ...mapGetters(['getTestString']),
+  },
+  methods: {
+    ...mapActions(['updateTestString']),
+    changeTestString() {
+      this.updateTestString('New Test String');
+    },
+  },
   };
 
   </script>

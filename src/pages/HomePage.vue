@@ -18,7 +18,6 @@ export default {
   data() {
     return {
       isModalVisible: false,
-      selectedLanguage: "en",
     };
   },
   methods: {
