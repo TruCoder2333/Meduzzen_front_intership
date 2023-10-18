@@ -1,7 +1,9 @@
 <template>
     <div>
-        <h1>User List Page</h1>
+        <h1>{{ $t('allUsers') }}</h1>
 
-        <router-link to="/">Back to Home</router-link>
+        <router-link to="/">{{ $t('home_link') }}</router-link>
     </div>
 </template>
+
+<script />

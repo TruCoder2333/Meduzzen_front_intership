@@ -1,7 +1,8 @@
 <template>
     <div>
-        <h1>Company Profile Page</h1>
-
-        <router-link to="/">Back to Home</router-link>
+        <h1>{{ $t('companyProfile') }}</h1>
+        <router-link to="/">{{ $t('home_link') }}</router-link>
     </div>
 </template>
+
+<script />

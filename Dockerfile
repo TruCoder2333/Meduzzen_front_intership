@@ -6,9 +6,9 @@ COPY package*.json ./
 
 RUN npm install
 
-RUN npm install vue-router
+RUN npm install vue-router lodash vue-i18n axios dotenv
 
-RUN npm install lodash
+RUN npm install vuex@next --save
 
 COPY . .
 

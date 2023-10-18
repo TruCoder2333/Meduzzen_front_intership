@@ -1,0 +1,14 @@
+{
+    "info": "About our company",
+    "home_link": "Back to home",
+    "about": "About",
+    "signUp": "Sign Up", 
+    "signIn": "Sign In", 
+    "allUsers": "All Users", 
+    "userProfile": "User Profile", 
+    "companyProfile": "Company Profile", 
+    "allCompanies": "All Companies",
+    "modalContent": "Modal Content",
+    "openModal": "Open Modal",
+    "greetings": "Welcome to our site"
+}

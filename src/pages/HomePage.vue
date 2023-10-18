@@ -1,26 +1,28 @@
 <template>
-  <HelloWorld msg="Hello mentor"/>
-  <button @click="openModal">Open Modal</button>
+  <h1>{{ $t('greetings') }}</h1>
+  <button @click="openModal">{{ $t('openModal') }}</button>
+
   <ModalWindow :visible="isModalVisible" @close="closeModal">
-      <h2>Modal Content</h2>
-      <p>This is the content of the modal.</p>
+      <h2>{{ $t('modalContent') }}</h2>
   </ModalWindow>
+  
 </template>
 
 <script>
-import HelloWorld from '/app/src/components/HelloWorld.vue'
 import ModalWindow from '/app/src/components/ModalWindow.vue'
+
+
+
 
 export default {
   name: 'HomePage',
   components: {
-    HelloWorld,
     ModalWindow,
   },
   data() {
     return {
-      isModalVisible: false
-    };
+      isModalVisible: false,
+      };
   },
   methods: {
     openModal() {
@@ -28,8 +30,9 @@ export default {
     },
     closeModal() {
       this.isModalVisible = false;
-    }
-  }
+    },
+  },
+  
 }
 </script>
 

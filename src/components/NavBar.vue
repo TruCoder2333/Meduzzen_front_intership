@@ -1,6 +1,14 @@
 <template>
     <nav>
-        <router-link v-for="link in links" :key="link" :to="`/${snakeCase(link)}`" class="nav-link">{{ link }}</router-link>
+        <router-link
+         v-for = "link in links" 
+         :key = "link" 
+         :to = "`/${snakeCase(link)}`" 
+         class="nav-link">
+         
+         {{ $t(link) }}
+        
+        </router-link>
     </nav>
 </template>
 
@@ -10,21 +18,26 @@ export default {
     name: 'NavBar',
     data() {
     return {
-      links: ['About',
-             'Sign Up', 
-             'Sign In', 
-             'All Users', 
-             'User Profile', 
-             'Company Profile', 
-             'All Companies'],
-      snakeCase: null
+      links: ['about',
+             'signUp', 
+             'signIn', 
+             'allUsers', 
+             'userProfile', 
+             'companyProfile', 
+             'allCompanies'],
+      snakeCase: null,
     };
   },
     created() {
-        import('lodash/snakeCase').then(module => {
+        import("lodash/snakeCase").then(module => {
         this.snakeCase = module.default;
     });
-  }
+  },
+  watch: {
+    selectedLanguage(newLang) {
+      this.$i18n.locale = newLang;
+    },
+  },
 };
 </script>
 
