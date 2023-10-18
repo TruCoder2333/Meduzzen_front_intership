@@ -1,7 +1,13 @@
 <template>
     <nav>
-        <router-link v-for = "link in links" :key = "link" :to = "`/${snakeCase(link)}`" class="nav-link">
-          {{ $t(link) }}
+        <router-link
+         v-for = "link in links" 
+         :key = "link" 
+         :to = "`/${snakeCase(link)}`" 
+         class="nav-link">
+         
+         {{ $t(link) }}
+        
         </router-link>
     </nav>
 </template>

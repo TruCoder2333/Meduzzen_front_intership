@@ -13,6 +13,7 @@ const routes = [
   { path: '/user_profile/', component: () => import('./pages/UserProfile.vue') },
   { path: '/company_profile/', component: () => import('./pages/CompanyProfile.vue') },
   { path: '/all_companies/', component: () => import('./pages/CompanyList.vue') },
+  { path: '/health_check/', component: () => import('./pages/HealthCheck.vue')}
 ];
 
 const router = createRouter({

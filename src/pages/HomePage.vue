@@ -5,10 +5,14 @@
   <ModalWindow :visible="isModalVisible" @close="closeModal">
       <h2>{{ $t('modalContent') }}</h2>
   </ModalWindow>
+  
 </template>
 
 <script>
 import ModalWindow from '/app/src/components/ModalWindow.vue'
+
+
+
 
 export default {
   name: 'HomePage',
@@ -18,7 +22,7 @@ export default {
   data() {
     return {
       isModalVisible: false,
-    };
+      };
   },
   methods: {
     openModal() {
@@ -27,8 +31,8 @@ export default {
     closeModal() {
       this.isModalVisible = false;
     },
+  },
   
-  }
 }
 </script>
 
