@@ -3,6 +3,9 @@ import { createStore } from 'vuex';
 const state = {
   testString: "Test String",
   locale: localStorage.getItem('locale'),
+  isAuthenticated: false, 
+  username: '', 
+  email: '', 
 };
 
 const mutations = {
@@ -12,6 +15,19 @@ const mutations = {
   setLocale(state, locale) {
     state.locale = locale;
     localStorage.setItem('locale', locale);
+  },
+  setToken(state, token) {
+    state.token = token; 
+    localStorage.setItem('token', token); 
+  },
+  setAuthentication(state, isAuthenticated) {
+    state.isAuthenticated = isAuthenticated;
+  },
+  setUsername(state, username) {
+    state.username = username;
+  },
+  setEmail(state, email) {
+    state.email = email;
   },
 };
 
@@ -23,10 +39,24 @@ const actions = {
   changeLocale({ commit }, locale) {
     commit('setLocale', locale);
   },
+
+  authenticate({ commit }, { username, email, token }) {
+   
+    commit('setAuthentication', true);
+
+    commit('setUsername', username);
+
+    commit('setEmail', email);
+
+    commit('setToken', token)
+  },
 };
 
 const getters = {
   getTestString: (state) => state.testString,
+  isAuthenticated: (state) => state.isAuthenticated,
+  username: (state) => state.username,
+  email: (state) => state.email,
 };
 
 
