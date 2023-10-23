@@ -2,7 +2,7 @@
     <div class="modal" v-if="visible">
       <div class="modal-content">
         <span class="close" @click="close">&times;</span>
-        <slot>Baobab</slot>
+        <slot></slot>
       </div>
     </div>
   </template>
