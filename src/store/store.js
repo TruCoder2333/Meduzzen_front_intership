@@ -1,4 +1,5 @@
 import { createStore } from 'vuex';
+import userCrud from './userCrud'
 
 const state = {
   testString: "Test String",
@@ -6,6 +7,8 @@ const state = {
   isAuthenticated: false, 
   username: '', 
   email: '', 
+  
+ 
 };
 
 const mutations = {
@@ -29,6 +32,8 @@ const mutations = {
   setEmail(state, email) {
     state.email = email;
   },
+  
+
 };
 
 const actions = {
@@ -48,8 +53,10 @@ const actions = {
 
     commit('setEmail', email);
 
-    commit('setToken', token)
+    commit('setToken', token);
+    
   },
+
 };
 
 const getters = {
@@ -65,7 +72,9 @@ const store = createStore({
   mutations,
   actions,
   getters,
-  modules: {},
+  modules: {
+    userCrud,
+  },
 });
 
 export default store;

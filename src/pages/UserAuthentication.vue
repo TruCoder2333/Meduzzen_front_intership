@@ -78,6 +78,7 @@ export default {
     openModal() {
       this.isModalVisible = true;
     },
+    
     closeModal() {
       this.isModalVisible = false;
     },
