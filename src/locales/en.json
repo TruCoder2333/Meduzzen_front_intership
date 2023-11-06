@@ -10,5 +10,17 @@
     "allCompanies": "All Companies",
     "modalContent": "Modal Content",
     "openModal": "Open Modal",
-    "greetings": "Welcome to our site"
+    "greetings": "Welcome to our site",
+    "previous": "Previous",
+    "next": "Next",
+    "changeTestStr": "Change test string",
+    "passError": "Passwords do not match.",
+    "emailError": "Invalid email format",
+    "findUser": "Find User",
+    "editUser": "Edit User",
+    "updateAvatar": "Update Avatar",
+    "save": "Save",
+    "deleteUser": "Delete User",
+    "name": "Name",
+    "additionalInfo": "Additional info"
 }

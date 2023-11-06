@@ -15,8 +15,8 @@
 <script>
 
 export default {
-    name: 'NavBar',
-    data() {
+  name: 'NavBar',
+  data() {
     return {
       links: ['about',
              'signUp', 
@@ -28,16 +28,18 @@ export default {
       snakeCase: null,
     };
   },
-    created() {
-        import("lodash/snakeCase").then(module => {
-        this.snakeCase = module.default;
-    });
-  },
   watch: {
     selectedLanguage(newLang) {
       this.$i18n.locale = newLang;
     },
   },
+
+  created() {
+        import("lodash/snakeCase").then(module => {
+        this.snakeCase = module.default;
+    });
+  },
+  
 };
 </script>
 
