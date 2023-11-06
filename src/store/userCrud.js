@@ -21,10 +21,9 @@ const actions = {
 
   async fetchUserList({ commit }) {
     try {
-      const response = await axiosInstance.get('/users/');
-
-      commit('setUserList', response.data);
-
+      const { data } = await axiosInstance.get('/users/');
+      commit('setUserList', data);
+      
     } catch (error) {
       console.error('Error fetching user list:', error);
     }

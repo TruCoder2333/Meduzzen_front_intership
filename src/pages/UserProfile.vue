@@ -4,21 +4,21 @@
 
       <router-link to="/">{{ $t('home_link') }}</router-link>
       <input v-model="id" placeholder="User ID">
-      <button @click="findId">Find User</button>
-      <button @click="toggleEditMode" v-if="!editMode">Edit User</button>
+      <button @click="findId">{{ $t('findUser') }}</button>
+      <button @click="toggleEditMode" v-if="!editMode">{{ $t('editUser') }}</button>
       
       <div v-if="editMode">
         <textarea v-model="additionalInfo" placeholder="Additional Information"></textarea>
         <input type="file" ref="avatarInput" @change="handleAvatarChange" />
-        <button @click="updateAvatar">Update Avatar</button>
-        <button @click="saveChanges" >Save</button>
-        <button @click="deleteUser"  class="delete-button">Delete User</button>
-        <p>Name: {{ editedUser }}</p>
+        <button @click="updateAvatar">{{ $t('updateAvatar') }}</button>
+        <button @click="saveChanges" >{{ $t('save') }}</button>
+        <button @click="deleteUser"  class="delete-button">{{ $t('deleteUser') }}</button>
+        <p>{{ $t('name') }}: {{ editedUser }}</p>
       </div>
       <div v-else>
-        <p>Name: {{ getUserDetails.username }}</p>
+        <p>{{ $t('name') }}: {{ getUserDetails.username }}</p>
         <p>Email: {{ getUserDetails.email }}</p>
-        <p>Additional Information: {{ getUserDetails.additionalInfo }}</p>
+        <p>{{ $t('additionalInfo') }}: {{ getUserDetails.additionalInfo }}</p>
       </div>
           
     </div>
@@ -36,6 +36,10 @@ import ModalWindow from '/app/src/components/ModalWindow.vue'
 
 
 export default {
+  components: {
+    ModalWindow,
+  },
+  
   data() {
     return {
       id: '',
@@ -48,13 +52,10 @@ export default {
     };
   },
 
-  components: {
-    ModalWindow,
-  },
-
   computed: {
     ...mapGetters(['getUserDetails', 'username']),
   },
+  
   methods: {
     ...mapActions(['fetchUserDetails', 'deleteProfile', 'updateUser', 'uploadUserAvatar']),
 

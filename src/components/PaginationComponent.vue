@@ -1,12 +1,15 @@
 <template>
     <div>
       <ul>
-        <li v-for="entity in displayedEntities" :key="entity.id">{{ entity.username }}</li>
+        <li v-for="entity in displayedEntities" 
+        :key="entity.id">
+        {{ entity.username }}
+        </li>
       </ul>
   
-      <button @click="previousPage" :disabled="currentPage === 1">Previous</button>
+      <button @click="previousPage" :disabled="currentPage === 1">{{ $t('previous') }}</button>
       <span>{{ currentPage }}</span>
-      <button @click="nextPage" :disabled="currentPage === totalPages">Next</button>
+      <button @click="nextPage" :disabled="currentPage === totalPages">{{ $t('next') }}</button>
     </div>
 </template>
   

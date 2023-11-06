@@ -7,7 +7,7 @@
         <input v-model="username" placeholder="Username">
         <input type="password" v-model="password" placeholder="Password">
         <input type="password" v-model="passwordConfirm" placeholder="Confirm Password">
-        <button @click="signUp">Sign Up</button>
+        <button @click="signUp">{{ $t('signUp') }}</button>
 
     </div>
     <ModalWindow 
@@ -79,12 +79,12 @@ export default {
     validate() {
       
       if (!this.email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
-        this.errorMessage = 'Invalid email format.';
+        this.errorMessage = this.$t('emailError');
         return false;
       }
 
       if (this.password !== this.passwordConfirm) {
-        this.errorMessage = 'Passwords do not match.';
+        this.errorMessage = this.$t('passError');
         return false;
       }
 
@@ -97,9 +97,7 @@ export default {
 
     closeModal() {
       this.isModalVisible = false;
-    },
-
-   
+    },   
   },
 };
 

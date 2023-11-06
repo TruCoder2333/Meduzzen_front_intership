@@ -5,7 +5,7 @@
         <input v-model="username" placeholder="Username">
         <input v-model="email" placeholder="Email">
         <input type="password" v-model="password" placeholder="Password">
-        <button @click="signIn">Sign In</button>
+        <button @click="signIn">{{ $t('signIn') }}</button>
     </div>
     <ModalWindow 
     ref="modalWindow" 
@@ -22,21 +22,21 @@ import { mapActions } from 'vuex';
 
 
 export default {
-    components: {
+  components: {
         ModalWindow,
-    },
+  },
 
-    data() {
-      return {
+  data() {
+    return {
         username: '',
         email: '',
         password: '',
         errorMessage:'',
         isModalVisible: false,
-      };
-    },
-    methods: {
-      ...mapActions(['authenticate']),
+    };
+  },
+  methods: {
+    ...mapActions(['authenticate']),
       async signIn() {
         if (!this.validate()) {
         
@@ -66,22 +66,22 @@ export default {
             }
         }
     },
-    validate() {
+  validate() {
       
       if (!this.email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
-        this.errorMessage = 'Invalid email format.';
+        this.errorMessage = this.$t('emailError');
         return false;
       }
 
       return true; 
-    },
-    openModal() {
+  },
+  openModal() {
       this.isModalVisible = true;
-    },
+  },
     
     closeModal() {
       this.isModalVisible = false;
-    },
+  },
 }
 };
 </script>
