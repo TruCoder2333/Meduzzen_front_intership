@@ -22,5 +22,11 @@
     "save": "Save",
     "deleteUser": "Delete User",
     "name": "Name",
-    "additionalInfo": "Additional info"
+    "additionalInfo": "Additional info",
+    "description": "Description",
+    "createCompany": "Create company",
+    "editCompany": "Edit Company",
+    "deleteCompany": "Delete Company",
+    "findCompany": "Find Company"
+
 }

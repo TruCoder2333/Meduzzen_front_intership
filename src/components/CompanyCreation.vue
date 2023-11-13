@@ -1,13 +1,13 @@
 <template>
     <div>
       <form @submit.prevent="createCompany">
-        <label for="name">Name:</label>
+        <label for="name">{{ $t('name') }}:</label>
         <input v-model="companyData.name" required>
   
-        <label for="description">Description:</label>
+        <label for="description">{{ $t('description') }}:</label>
         <textarea v-model="companyData.description" required></textarea>
   
-        <button type="submit">Create Company</button>
+        <button type="submit">{{ $t('createCompany') }}</button>
       </form>
     </div>
   </template>

@@ -3,16 +3,16 @@
         <h1>{{ $t('companyProfile') }}</h1>
         <router-link to="/">{{ $t('home_link') }}</router-link>
         <input v-model="id" placeholder="Company ID">
-        <button @click="findId">Find Company</button>
+        <button @click="findId">{{ $t('findCompany') }}</button>
         <button @click="toggleEditMode" 
                 v-if="!editMode && isCompanyOwner">
-                Edit Company
+                {{ $t('editCompany') }}
             </button>
       
         <div v-if="editMode">
             <textarea v-model="additionalInfo" placeholder="Description"></textarea>
             <button @click="saveChanges" >{{ $t('save') }}</button>
-            <button @click="deleteComp"  class="delete-button"> Delete company</button>
+            <button @click="deleteComp"  class="delete-button">{{ $t('deleteCompany') }}</button>
         </div>
         <div v-else>
             <p>{{ $t('name') }}: {{ getCompanyDetails.name }}</p>
