@@ -21,6 +21,11 @@
     "save": "Зберегти",
     "deleteUser": "Видалити Користувача",
     "name": "Ім'я",
-    "additionalInfo": "Додаткова інформація"
+    "additionalInfo": "Додаткова інформація",
+    "description": "Опис",
+    "createCompany": "Створити компанію",
+    "editCompany": "Змінити компанію",
+    "deleteCompany": "Видалити компанію",
+    "findCompany": "Знайти компанію"
 
 }

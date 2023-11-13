@@ -1,14 +1,13 @@
 import { createStore } from 'vuex';
-import userCrud from './userCrud'
+import userCrud from './userCrud';
+import companyCrud from './companyCrud';
 
 const state = {
   testString: "Test String",
   locale: localStorage.getItem('locale'),
   isAuthenticated: false, 
-  username: '', 
-  email: '', 
-  
- 
+  currentUser: '',
+  token: localStorage.getItem('token'), 
 };
 
 const mutations = {
@@ -26,14 +25,9 @@ const mutations = {
   setAuthentication(state, isAuthenticated) {
     state.isAuthenticated = isAuthenticated;
   },
-  setUsername(state, username) {
-    state.username = username;
+  setCurrentUser(state, currentUser) {
+    state.currentUser = currentUser;
   },
-  setEmail(state, email) {
-    state.email = email;
-  },
-  
-
 };
 
 const actions = {
@@ -45,16 +39,9 @@ const actions = {
     commit('setLocale', locale);
   },
 
-  authenticate({ commit }, { username, email, token }) {
-   
+  authenticate({ commit },  token) {
     commit('setAuthentication', true);
-
-    commit('setUsername', username);
-
-    commit('setEmail', email);
-
     commit('setToken', token);
-    
   },
 
 };
@@ -62,8 +49,7 @@ const actions = {
 const getters = {
   getTestString: (state) => state.testString,
   isAuthenticated: (state) => state.isAuthenticated,
-  username: (state) => state.username,
-  email: (state) => state.email,
+  getCurrentUser: (state) => state.currentUser,
 };
 
 
@@ -74,6 +60,7 @@ const store = createStore({
   getters,
   modules: {
     userCrud,
+    companyCrud,
   },
 });
 
