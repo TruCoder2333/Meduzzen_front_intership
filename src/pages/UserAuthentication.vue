@@ -46,13 +46,14 @@ export default {
               const response = await axiosInstance.post('/auth/token/create/', {
               username: this.username,
               password: this.password,
+
               });
+              const token = response.data.auth_token;
+              this.authenticate(token);
+          
+              const user_response  = await axiosInstance.get(`/users/by-username/${this.username}/`);
+              this.$store.commit('setCurrentUser', user_response.data);              
 
-              const token = response.data.token;
-              const username = this.username;
-              const email = this.email;
-
-              this.authenticate({username, email, token}); 
               this.$router.push({ path: '/' });
 
         } catch (error) {

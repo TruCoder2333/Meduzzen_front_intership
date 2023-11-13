@@ -2,8 +2,11 @@
   <div>
     <router-view />
     <header>
-      <h4>{{ username }}</h4>
-      <h4>{{ email }}</h4>
+      <h4>{{ getCurrentUser.username }}</h4>
+      <h4>{{ getCurrentUser.email }}</h4>
+
+
+
       <NavBar />
     </header>
     <select v-model="selectedLanguage">
@@ -43,7 +46,7 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(['username', 'email', 'getTestString']),
+    ...mapGetters(['getCurrentUser', 'getTestString']),
   },
   methods: {
     ...mapActions(['updateTestString']),

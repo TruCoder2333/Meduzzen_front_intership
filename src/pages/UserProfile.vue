@@ -53,7 +53,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters(['getUserDetails', 'username']),
+    ...mapGetters(['getUserDetails', 'getCurrentUser']),
   },
   
   methods: {
@@ -65,7 +65,7 @@ export default {
     },
 
     async deleteUser() {
-      if (this.getUserDetails.username != this.username) {
+      if (this.getUserDetails.username != this.getCurrentUser.username) {
         this.isModalVisible = true;
         this.errorMessage = "You cannot delete other users profile"
       }
