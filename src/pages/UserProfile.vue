@@ -83,7 +83,13 @@
 
         <div v-if="showLeaveCompanyForm">
           <input v-model="companyId" placeholder="Enter Company ID">
-          <button @click="leaveCompany">{{ $t('accept') }}</button>
+          <button @click="requestAction">{{ $t('accept') }}</button>
+          <ConfirmationModal
+            :isVisible="showConfirmationModal"
+            :message= "confirmationMessage"
+            :onConfirm="leaveCompany"
+            @update:isVisible="showConfirmationModal = $event">
+          </ConfirmationModal>
           <p v-if="errorMessage">{{ errorMessage }}</p>
         </div>
 
@@ -116,10 +122,12 @@
 import { mapGetters, mapActions } from 'vuex';
 import ModalWindow from '/app/src/components/ModalWindow.vue';
 import axiosInstance from '@/utils/axiosInstance';
+import ConfirmationModal from '@/components/ConfirmationModal.vue';
 
 export default {
   components: {
     ModalWindow,
+    ConfirmationModal
   },
   
   data() {
@@ -127,6 +135,7 @@ export default {
       id: '',
       errorMessage: '',
       isModalVisible: false,
+      showConfirmationModal: false,
       editMode: false,
       editedUser: null,
       additionalInfo: '',
@@ -152,6 +161,10 @@ export default {
         const foundUser = this.getUserDetails.id; 
         return currentUser && foundUser && currentUser === foundUser;
     },
+
+    confirmationMessage() {
+      return this.$t('confirmCompanyLeave');
+    },
   },
   
   methods: {
@@ -162,6 +175,10 @@ export default {
       this.fetchUserDetails(id);
     },
     
+    requestAction() {
+      this.showConfirmationModal = true;
+    },
+
     async deleteUser() {
       if (this.getUserDetails.username != this.getCurrentUser.username) {
         this.isModalVisible = true;

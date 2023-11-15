@@ -70,7 +70,7 @@
 
       <div v-if="showRemoveMemberForm">
         <input v-model="userId" placeholder="Enter User ID">
-        <button @click="requestAction">{{ $t('remove') }}</button>
+        <button @click="confirmRemoveUser">{{ $t('remove') }}</button>
         <ConfirmationModal
           :isVisible="showConfirmationModal"
           :message= "confirmationMessage"
@@ -114,6 +114,52 @@
         </ul>
         <button @click="showListMembers = false">{{ $t('close') }}</button>
       </div>
+      
+      <button @click="listAdmins">{{ $t('listAdmins') }}</button>
+
+      <div v-if="showListAdmins">
+        <p v-if="errorMessage">{{ errorMessage }}</p>
+        <ul>
+          <li v-for="user in admins" :key="user.id">
+            {{ user.username }} 
+          </li>
+        </ul>
+        <button @click="showListAdmins = false">{{ $t('close') }}</button>
+      </div>
+
+      <button 
+        @click="showAppointAdminForm = true">
+        {{ $t('appointAdmin') }}
+      </button>
+
+      <div v-if="showAppointAdminForm">
+        <input v-model="userId" placeholder="Enter User ID">
+        <button @click="confirmAppointAdmin">{{ $t('appoint') }}</button>
+        <ConfirmationModal
+          :isVisible="showConfirmationModal"
+          :message= "confirmationMessage"
+          :onConfirm="appointAdmin"
+          @update:isVisible="showConfirmationModal = $event">
+        </ConfirmationModal>
+        <p v-if="errorMessage">{{ errorMessage }}</p>
+      </div>
+
+      <button 
+        @click="showRemoveAdminForm = true">
+        {{ $t('removeAdmin') }}
+      </button>
+
+      <div v-if="showRemoveAdminForm">
+        <input v-model="userId" placeholder="Enter User ID">
+        <button @click="confirmRemoveAdmin">{{ $t('remove') }}</button>
+        <ConfirmationModal
+          :isVisible="showConfirmationModal"
+          :message= "confirmationMessage"
+          :onConfirm="removeAdmin"
+          @update:isVisible="showConfirmationModal = $event">
+        </ConfirmationModal>
+        <p v-if="errorMessage">{{ errorMessage }}</p>
+      </div>
 
     </div>
 
@@ -148,6 +194,7 @@ export default {
       id: '',
       editMode: false,
       showConfirmationModal: false,
+      confirmationContext: '',
       editedCompany: null,
       errorMessage: '',
       showSendInvitationForm: false,
@@ -161,7 +208,11 @@ export default {
       showAcceptRequestForm: false,
       showRejectRequestForm: false,
       users: [],
-      showListMembers: false
+      showListMembers: false,
+      showAppointAdminForm: false,
+      showRemoveAdminForm: false,
+      showListAdmins: false,
+      admins: []
     };
   },
 
@@ -175,7 +226,16 @@ export default {
     },
 
     confirmationMessage() {
-      return this.$t('confirm');
+      switch (this.confirmationContext) {
+        case 'removeUser':
+          return this.$t('confirmUserRemove');
+        case 'appointAdmin':
+          return this.$t('confirmAppointAdmin');
+        case 'removeAdmin':
+          return this.$t('confirmRemoveAdmin');
+        default:
+        return ''; 
+      }
     },
   },
   
@@ -187,7 +247,18 @@ export default {
       this.fetchCompanyDetails(id);
     },
 
-    requestAction() {
+    confirmRemoveUser() {
+      this.confirmationContext = 'removeUser';
+      this.showConfirmationModal = true;
+    },
+
+    confirmAppointAdmin() {
+      this.confirmationContext = 'appointAdmin';
+      this.showConfirmationModal = true;
+    },
+
+    confirmRemoveAdmin() {
+      this.confirmationContext = 'removeAdmin';
       this.showConfirmationModal = true;
     },
 
@@ -328,8 +399,52 @@ export default {
           console.error('Error fetching users:', error);
         }
     },
+
+    async listAdmins() {
+      try {
+        const companyId = this.getCompanyDetails.id;
+        const response = await axiosInstance.get(`/company/${companyId}/list_administrators/`); 
+        this.admins = response.data;
+        this.showListAdmins = true;
+      } catch (error) {
+          console.error('Error fetching users:', error);
+        }
+    },
+
+    async appointAdmin() {
+      try {
+        const companyId = this.getCompanyDetails.id;
+        await axiosInstance.post(`/company/${companyId}/appoint_administrator/`, { user_id: this.userId });
+        this.showAppointAdminForm = false;
+        this.showInvitationSection = false;
+        } catch (error) {
+        
+        if (error.response && error.response.status === 404) {
+          this.errorMessage = this.$t('notFoundError');
+        } else {
+          this.errorMessage = this.$t('processError');
+        }
+          console.error('Error appointing admin:', error);
+      }
+    },
+
+    async removeAdmin() {
+      try {
+        const companyId = this.getCompanyDetails.id;
+        await axiosInstance.post(`/company/${companyId}/remove_administrator/`, { user_id: this.userId });
+        this.showRemoveAdminForm = false;
+        this.showInvitationSection = false;
+        } catch (error) {
+        
+        if (error.response && error.response.status === 404) {
+          this.errorMessage = this.$t('notFoundError');
+        } else {
+          this.errorMessage = this.$t('processError');
+        }
+          console.error('Error appointing admin:', error);
+      }
+    }
   },
-  
 };
 </script>
 
