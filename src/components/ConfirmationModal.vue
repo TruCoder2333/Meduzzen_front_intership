@@ -1,8 +1,8 @@
 <template>
     <div v-if="isVisible" class="modal">
       <p>{{ message }}</p>
-      <button @click="confirm">Yes</button>
-      <button @click="cancel">No</button>
+      <button @click="confirm">{{ $t('yes') }}</button>
+      <button @click="cancel">{{ $t('no') }}</button>
     </div>
 </template>
   

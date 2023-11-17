@@ -35,6 +35,7 @@
     "revokeInvitation": "Revoke Invitation",
     "revoke": "Revoke",
     "listInvitations": "List Invitations",
+    "listInvites": "List Invitations",
     "removeMember": "Remove Member",
     "remove": "Remove",
     "confirmUserRemove": "Are you sure you want to remove the user?",
@@ -56,12 +57,14 @@
     "notFoundError": "The required entity was not found",
     "processError": "Error during the action",
     "actions": "Actions",
-    "appointAdmin": "Appoint administrator",
-    "removeAdmin": "Remove administrator",
+    "appointAdministrator": "Appoint administrator",
+    "removeAdministrator": "Remove administrator",
     "appoint": "Appoint",
     "confirmAppointAdmin": "Are you sure you want to appoint this user as your administrator?",
     "confirmRemoveAdmin": "Are you sure you want this user to stop being andministrator?",
-    "listAdmins": "List administrators"
-
+    "listAdministrators": "List administrators",
+    "yes": "Yes",
+    "no": "No",
+    "confirm": "Are you sure?"
 
 }

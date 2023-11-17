@@ -1,56 +1,72 @@
 <template>
     <div>
-      <ul>
-        <li v-for="entity in displayedEntities" 
-        :key="entity.id">
-        {{ entity.username }}
-        </li>
-      </ul>
+      <button @click="fetchUsers">{{ $t(actionName) }}</button>
   
-      <button @click="previousPage" :disabled="currentPage === 1">{{ $t('previous') }}</button>
-      <span>{{ currentPage }}</span>
-      <button @click="nextPage" :disabled="currentPage === totalPages">{{ $t('next') }}</button>
+      <div v-if="showList">
+        <p v-if="errorMessage">{{ errorMessage }}</p>
+        <ul>
+          <li v-for="something in list" :key="something.id">
+            {{ something[idName] }} 
+          </li>
+        </ul>
+        <button @click="showList = false">{{ $t('close') }}</button>
+      </div>
     </div>
-</template>
+  </template>
   
-  <script>
-  export default {
+<script>
+import axiosInstance from '@/utils/axiosInstance';
+import { snakeCase } from 'lodash';
+import { mapGetters } from 'vuex';
+
+export default {
     props: {
-      entities: {
-        type: Array,
-        required: true,
-      },
-      currentPage: {
-        type: Number,
-        required: true,
-      },
-      entitiesPerPage: {
-        type: Number,
-        required: true,
-      },
+        actionName: String,
+        idName: String,
+        byWhom: String,
     },
+
+    data() {
+      return {
+        list: [],
+        errorMessage: '',
+        showList: false
+      };
+    },
+
     computed: {
-      totalPages() {
-        return Math.ceil(this.entities.length / this.entitiesPerPage);
-      },
-      displayedEntities() {
-        const startIndex = (this.currentPage - 1) * this.entitiesPerPage;
-        const endIndex = startIndex + this.entitiesPerPage;
-        return this.entities.slice(startIndex, endIndex);
-      },
+    ...mapGetters(['getCompanyDetails', 'getCurrentUser']),
+
+        apiUrl() {
+            const actionNameSnakeCase = snakeCase(this.actionName);
+            let id;
+            
+            if (this.byWhom === 'company') {
+                id = this.getCompanyDetails.id;
+            } else if (this.byWhom === 'users') {
+                id = this.getCurrentUser.id;
+            } else {
+                console.error(`Unexpected byWhom value: ${this.byWhom}`);
+                this.$emit('error', `Unexpected byWhom value: ${this.byWhom}`);
+
+            }
+
+            return `/${this.byWhom}/${id}/${actionNameSnakeCase}/`;
+        },
     },
+
     methods: {
-      previousPage() {
-        if (this.currentPage > 1) {
-          this.$emit('update:currentPage', this.currentPage - 1);
+      async fetchUsers() {
+        try {
+            const response = await axiosInstance.get(this.apiUrl);
+            this.list = response.data;
+            this.showList = true;
+        } catch (error) {
+            this.errorMessage = 'Error fetching requests';
+            console.error('Error fetching requests:', error);
         }
-      },
-      nextPage() {
-        if (this.currentPage < this.totalPages) {
-          this.$emit('update:currentPage', this.currentPage + 1);
-        }
-      },
-    },
+      }
+    }
   };
   </script>
   

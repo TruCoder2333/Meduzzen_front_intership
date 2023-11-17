@@ -17,149 +17,22 @@
     </button>
 
     <div v-if="showInvitationSection">
-      <button 
-        @click="showSendInvitationForm = true">
-        {{ $t('sendInvitation') }}
-      </button>
-                  
-      <div v-if="showSendInvitationForm">
-        <input v-model="userId" placeholder="Enter User ID">
-        <button @click="sendInvitation">{{ $t('invite') }}</button>
-        <p v-if="errorMessage">{{ errorMessage }}</p>
-      </div>
-
-      <button 
-        @click="showRevokeInvitationForm = true">
-        {{ $t('revokeInvitation') }}
-      </button>
-
-      <div v-if="showRevokeInvitationForm">
-        <input v-model="userId" placeholder="Enter User ID">
-        <button @click="revokeInvitation">{{ $t('revoke') }}</button>
-        <p v-if="errorMessage">{{ errorMessage }}</p>
-      </div>
-
-      <button @click="listInvitations">{{ $t('listInvitations') }}</button>
-
-      <div v-if="showListInvitations">
-        <p v-if="errorMessage">{{ errorMessage }}</p>
-        <ul>
-          <li v-for="user in invitedUsers" :key="user.id">
-            {{ user.invited_user_id }} 
-          </li>
-        </ul>
-        <button @click="showListInvitations = false">{{ $t('close') }}</button>
-      </div>
-
-      <button @click="listRequests">{{ $t('listRequests') }}</button>
-
-      <div v-if="showListRequests">
-        <p v-if="errorMessage">{{ errorMessage }}</p>
-        <ul>
-          <li v-for="user in userRequests" :key="user.id">
-            {{ user.invited_user_id }} 
-          </li>
-        </ul>
-        <button @click="showListRequests = false">{{ $t('close') }}</button>
-      </div>
-
-      <button 
-        @click="showRemoveMemberForm = true">
-        {{ $t('removeMember') }}
-      </button>
-
-      <div v-if="showRemoveMemberForm">
-        <input v-model="userId" placeholder="Enter User ID">
-        <button @click="confirmRemoveUser">{{ $t('remove') }}</button>
-        <ConfirmationModal
-          :isVisible="showConfirmationModal"
-          :message= "confirmationMessage"
-          :onConfirm="removeMember"
-          @update:isVisible="showConfirmationModal = $event">
-        </ConfirmationModal>
-
-        <p v-if="errorMessage">{{ errorMessage }}</p>
-      </div>
-
-      <button 
-        @click="showAcceptRequestForm = true">
-        {{ $t('acceptRequest') }}
-      </button>
-
-      <div v-if="showAcceptRequestForm">
-        <input v-model="userId" placeholder="Enter User ID">
-        <button @click="acceptRequest">{{ $t('accept') }}</button>
-        <p v-if="errorMessage">{{ errorMessage }}</p>
-      </div>
-
-      <button 
-        @click="showRejectRequestForm = true">
-        {{ $t('rejectRequest') }}
-      </button>
-
-      <div v-if="showRejectRequestForm">
-        <input v-model="userId" placeholder="Enter User ID">
-        <button @click="rejectRequest">{{ $t('reject') }}</button>
-        <p v-if="errorMessage">{{ errorMessage }}</p>
-      </div>
-
-      <button @click="listMembers">{{ $t('listMembers') }}</button>
-
-      <div v-if="showListMembers">
-        <p v-if="errorMessage">{{ errorMessage }}</p>
-        <ul>
-          <li v-for="user in users" :key="user.id">
-            {{ user.username }} 
-          </li>
-        </ul>
-        <button @click="showListMembers = false">{{ $t('close') }}</button>
-      </div>
-      
-      <button @click="listAdmins">{{ $t('listAdmins') }}</button>
-
-      <div v-if="showListAdmins">
-        <p v-if="errorMessage">{{ errorMessage }}</p>
-        <ul>
-          <li v-for="user in admins" :key="user.id">
-            {{ user.username }} 
-          </li>
-        </ul>
-        <button @click="showListAdmins = false">{{ $t('close') }}</button>
-      </div>
-
-      <button 
-        @click="showAppointAdminForm = true">
-        {{ $t('appointAdmin') }}
-      </button>
-
-      <div v-if="showAppointAdminForm">
-        <input v-model="userId" placeholder="Enter User ID">
-        <button @click="confirmAppointAdmin">{{ $t('appoint') }}</button>
-        <ConfirmationModal
-          :isVisible="showConfirmationModal"
-          :message= "confirmationMessage"
-          :onConfirm="appointAdmin"
-          @update:isVisible="showConfirmationModal = $event">
-        </ConfirmationModal>
-        <p v-if="errorMessage">{{ errorMessage }}</p>
-      </div>
-
-      <button 
-        @click="showRemoveAdminForm = true">
-        {{ $t('removeAdmin') }}
-      </button>
-
-      <div v-if="showRemoveAdminForm">
-        <input v-model="userId" placeholder="Enter User ID">
-        <button @click="confirmRemoveAdmin">{{ $t('remove') }}</button>
-        <ConfirmationModal
-          :isVisible="showConfirmationModal"
-          :message= "confirmationMessage"
-          :onConfirm="removeAdmin"
-          @update:isVisible="showConfirmationModal = $event">
-        </ConfirmationModal>
-        <p v-if="errorMessage">{{ errorMessage }}</p>
-      </div>
+      <InviteAction
+      v-for="action in actions"
+      :key="action.actionName"
+      :actionName="action.actionName"
+      :idName="action.idName"
+      :byWhom="'company'"
+      :requireConfirmation="action.requireConfirmation"
+      />
+    
+      <PaginationComponent
+      v-for="list in lists"
+      :key="list.actionName"
+      :actionName="list.actionName"  
+      :idName="list.idName"
+      :byWhom="'company'"
+      />
 
     </div>
 
@@ -181,38 +54,40 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
-import axiosInstance from '@/utils/axiosInstance';
-import ConfirmationModal from '@/components/ConfirmationModal.vue'
+import InviteAction from '@/components/InviteAction.vue'
+import PaginationComponent from '@/components/PaginationComponent.vue';
 
 export default {
   components: {
-    ConfirmationModal,
+    InviteAction,
+    PaginationComponent
   },  
 
   data() {
     return {
       id: '',
       editMode: false,
+      showInvitationSection: false,
       showConfirmationModal: false,
       confirmationContext: '',
       editedCompany: null,
       errorMessage: '',
-      showSendInvitationForm: false,
-      showInvitationSection: false, 
-      showRevokeInvitationForm: false,
-      showListInvitations: false,
-      showListRequests: false,
-      invitedUsers: [],
-      userRequests: [],
-      showRemoveMemberForm: false,
-      showAcceptRequestForm: false,
-      showRejectRequestForm: false,
-      users: [],
-      showListMembers: false,
-      showAppointAdminForm: false,
-      showRemoveAdminForm: false,
-      showListAdmins: false,
-      admins: []
+      actions: [
+        { actionName: 'sendInvitation', idName: 'invited_user_id' },
+        { actionName: 'revokeInvitation', idName: 'invited_user_id' },
+        { actionName: 'removeMember', idName: 'user_id', requireConfirmation: true  },
+        { actionName: 'acceptRequest', idName: 'req_user_id' },
+        { actionName: 'rejectRequest', idName: 'req_user_id' },
+        { actionName: 'appointAdministrator', idName: 'user_id', requireConfirmation: true },
+        { actionName: 'removeAdministrator', idName: 'user_id', requireConfirmation: true }
+      ],
+      lists: [
+        { actionName: 'listInvitations', idName: 'invited_user_id' },
+        { actionName: 'listRequests', idName: 'invited_user_id' },
+        { actionName: 'listMembers', idName: 'username' },
+        { actionName: 'listAdministrators', idName: 'username' },
+      ]
+
     };
   },
 
@@ -245,6 +120,10 @@ export default {
     async findId() {
       const id = this.id;
       this.fetchCompanyDetails(id);
+    },
+
+    toggleVisibility(toggleName) {
+      this[toggleName] = !this[toggleName];
     },
 
     confirmRemoveUser() {
@@ -280,171 +159,9 @@ export default {
       this.deleteCompany(this.getCompanyDetails.id);
       this.editMode = false;
     },
-
-    async sendInvitation() {
-      try {
-        const companyId = this.getCompanyDetails.id;
-        await axiosInstance.post(`/company/${companyId}/send_invitation/`, { invited_user_id: this.userId });
-        this.showSendInvitationForm = false;
-        this.showInvitationSection = false;
-        } catch (error) {
-        
-        if (error.response && error.response.status === 404) {
-          this.errorMessage = this.$t('notFoundError');
-        } else {
-          this.errorMessage = this.$t('processError');
-        }
-        console.error('Error sending invitation:', error);
-      }
-    },
-
-    async revokeInvitation() {
-      try {
-        const companyId = this.getCompanyDetails.id;
-        await axiosInstance.post(`/company/${companyId}/revoke_invitation/`, { invited_user_id: this.userId });
-        this.showRevokeInvitationForm = false;
-        this.showInvitationSection = false;
-        } catch (error) {
-        
-        if (error.response && error.response.status === 404) {
-          this.errorMessage = this.$t('notFoundError');
-        } else {
-          this.errorMessage = this.$t('processError');
-        }
-        console.error('Error sending invitation:', error);
-      }
-    },
-
-    async acceptRequest() {
-      try {
-        const companyId = this.getCompanyDetails.id;
-        await axiosInstance.post(`/company/${companyId}/accept_request/`, { req_user_id: this.userId });
-        this.showAcceptRequestForm = false;
-        this.showInvitationSection = false;
-        } catch (error) {
-        
-        if (error.response && error.response.status === 404) {
-          this.errorMessage = this.$t('notFoundError');
-        } else {
-          this.errorMessage = this.$t('processError');
-        }
-        console.error('Error sending invitation:', error);
-      }
-    },
-
-    async rejectRequest() {
-      try {
-        const companyId = this.getCompanyDetails.id;
-        await axiosInstance.post(`/company/${companyId}/reject_request/`, { req_user_id: this.userId });
-        this.showRejectRequestForm = false;
-        this.showInvitationSection = false;
-        } catch (error) {
-        
-        if (error.response && error.response.status === 404) {
-          this.errorMessage = this.$t('notFoundError');
-        } else {
-          this.errorMessage = this.$t('processError');
-        }
-          console.error('Error sending invitation:', error);
-      }
-    },
-
-
-    async listInvitations() {
-      try {
-        const companyId = this.getCompanyDetails.id;
-        const response = await axiosInstance.get(`/company/${companyId}/list_invitations/`); 
-        this.invitedUsers = response.data;
-        this.showListInvitations = true;
-      } catch (error) {
-          console.error('Error fetching invites:', error);
-        }
-    },
-
-    async listRequests() {
-      try {
-        const companyId = this.getCompanyDetails.id;
-        const response = await axiosInstance.get(`/company/${companyId}/list_requests/`); 
-        this.userRequests = response.data;
-        this.showListRequests = true;
-      } catch (error) {
-          console.error('Error fetching requests:', error);
-        }
-    },
     
-    async removeMember() {
-      try {
-        const companyId = this.getCompanyDetails.id;
-        await axiosInstance.post(`/company/${companyId}/remove_member/`, { user_id: this.userId });
-        this.showRemoveMemberForm = false;
-        this.showInvitationSection = false;
-        } catch (error) {
-        
-        if (error.response && error.response.status === 404) {
-          this.errorMessage = this.$t('notFoundError');
-        } else {
-          this.errorMessage = this.$t('processError');
-        }
-        console.error('Error during deletion:', error);
-      }
-    },
-
-    async listMembers() {
-      try {
-        const companyId = this.getCompanyDetails.id;
-        const response = await axiosInstance.get(`/company/${companyId}/list_members/`); 
-        this.users = response.data;
-        this.showListMembers = true;
-      } catch (error) {
-          console.error('Error fetching users:', error);
-        }
-    },
-
-    async listAdmins() {
-      try {
-        const companyId = this.getCompanyDetails.id;
-        const response = await axiosInstance.get(`/company/${companyId}/list_administrators/`); 
-        this.admins = response.data;
-        this.showListAdmins = true;
-      } catch (error) {
-          console.error('Error fetching users:', error);
-        }
-    },
-
-    async appointAdmin() {
-      try {
-        const companyId = this.getCompanyDetails.id;
-        await axiosInstance.post(`/company/${companyId}/appoint_administrator/`, { user_id: this.userId });
-        this.showAppointAdminForm = false;
-        this.showInvitationSection = false;
-        } catch (error) {
-        
-        if (error.response && error.response.status === 404) {
-          this.errorMessage = this.$t('notFoundError');
-        } else {
-          this.errorMessage = this.$t('processError');
-        }
-          console.error('Error appointing admin:', error);
-      }
-    },
-
-    async removeAdmin() {
-      try {
-        const companyId = this.getCompanyDetails.id;
-        await axiosInstance.post(`/company/${companyId}/remove_administrator/`, { user_id: this.userId });
-        this.showRemoveAdminForm = false;
-        this.showInvitationSection = false;
-        } catch (error) {
-        
-        if (error.response && error.response.status === 404) {
-          this.errorMessage = this.$t('notFoundError');
-        } else {
-          this.errorMessage = this.$t('processError');
-        }
-          console.error('Error appointing admin:', error);
-      }
-    }
-  },
+    
+  }
 };
 </script>
 

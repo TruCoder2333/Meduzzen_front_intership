@@ -7,91 +7,23 @@
       <button @click="findId">{{ $t('findUser') }}</button>
       <div v-if="isCurrentUser">
         <button @click="toggleEditMode" v-if="!editMode">{{ $t('editUser') }}</button>
-      
-        <button 
-          @click="showSendRequestForm = true">
-          {{ $t('sendRequest') }}
-        </button>
+        
+        <InviteAction
+        v-for="action in actions"
+        :key="action.actionName"
+        :actionName="action.actionName"
+        :idName="action.idName"
+        :byWhom="'users'"
+        :requireConfirmation="action.requireConfirmation"
+        />
 
-        <div v-if="showSendRequestForm">
-          <input v-model="companyId" placeholder="Enter Company ID">
-          <button @click="sendRequest">{{ $t('request') }}</button>
-          <p v-if="errorMessage">{{ errorMessage }}</p>
-        </div>
-
-        <button 
-          @click="showRevokeRequestForm = true">
-          {{ $t('revokeRequest') }}
-        </button>
-
-        <div v-if="showRevokeRequestForm">
-          <input v-model="companyId" placeholder="Enter Company ID">
-          <button @click="revokeRequest">{{ $t('revoke') }}</button>
-          <p v-if="errorMessage">{{ errorMessage }}</p>
-        </div>
-
-        <button 
-          @click="showAcceptInvitationForm = true">
-          {{ $t('acceptInvitation') }}
-        </button>
-
-        <div v-if="showAcceptInvitationForm">
-          <input v-model="companyId" placeholder="Enter Company ID">
-          <button @click="acceptInvitation">{{ $t('accept') }}</button>
-          <p v-if="errorMessage">{{ errorMessage }}</p>
-        </div>
-
-        <button 
-          @click="showDeclineInvitationForm = true">
-          {{ $t('declineInvitation') }}
-        </button>
-
-        <div v-if="showDeclineInvitationForm">
-          <input v-model="companyId" placeholder="Enter Company ID">
-          <button @click="declineInvitation">{{ $t('reject') }}</button>
-          <p v-if="errorMessage">{{ errorMessage }}</p>
-        </div>
-
-        <button @click="listRequests">{{ $t('listRequests') }}</button>
-
-        <div v-if="showListRequests">
-          <p v-if="errorMessage">{{ errorMessage }}</p>
-          <ul>
-            <li v-for="company in userRequests" :key="company.id">
-              {{ company.company_id }} 
-            </li>
-          </ul>
-          <button @click="showListRequests = false">{{ $t('close') }}</button>
-        </div>
-
-        <button @click="listInvitations">{{ $t('listInvitations') }}</button>
-
-        <div v-if="showListInvitations">
-          <p v-if="errorMessage">{{ errorMessage }}</p>
-          <ul>
-            <li v-for="company in invitations" :key="company.id">
-              {{ company.company_id }} 
-            </li>
-          </ul>
-          <button @click="showListInvitations = false">{{ $t('close') }}</button>
-        </div>
-
-        <button 
-          @click="showLeaveCompanyForm = true">
-          {{ $t('leaveCompany') }}
-        </button>
-
-        <div v-if="showLeaveCompanyForm">
-          <input v-model="companyId" placeholder="Enter Company ID">
-          <button @click="requestAction">{{ $t('accept') }}</button>
-          <ConfirmationModal
-            :isVisible="showConfirmationModal"
-            :message= "confirmationMessage"
-            :onConfirm="leaveCompany"
-            @update:isVisible="showConfirmationModal = $event">
-          </ConfirmationModal>
-          <p v-if="errorMessage">{{ errorMessage }}</p>
-        </div>
+        <PaginationComponent
+        v-for="list in lists"
+        :key="list.actionName"
+        :actionName="list.actionName"  
+        :idName="list.idName"
+        :byWhom="'users'"
+        />
 
       </div>
 
@@ -121,13 +53,14 @@
 <script>
 import { mapGetters, mapActions } from 'vuex';
 import ModalWindow from '/app/src/components/ModalWindow.vue';
-import axiosInstance from '@/utils/axiosInstance';
-import ConfirmationModal from '@/components/ConfirmationModal.vue';
+import InviteAction from '@/components/InviteAction.vue'
+import PaginationComponent from '@/components/PaginationComponent.vue';
 
 export default {
   components: {
     ModalWindow,
-    ConfirmationModal
+    InviteAction,
+    PaginationComponent,
   },
   
   data() {
@@ -135,21 +68,22 @@ export default {
       id: '',
       errorMessage: '',
       isModalVisible: false,
-      showConfirmationModal: false,
       editMode: false,
       editedUser: null,
       additionalInfo: '',
       selectedAvatar: null,
       showRequestSection: false,
-      showSendRequestForm: false,
-      showRevokeRequestForm: false,
-      showAcceptInvitationForm: false,
-      showDeclineInvitationForm: false,
-      showListRequests: false,
-      userRequests: [],
-      showListInvitations: false,
-      invitations: [],
-      showLeaveCompanyForm: false
+      actions: [
+        { actionName: 'sendRequest', idName: 'req_company_id' },
+        { actionName: 'revokeRequest', idName: 'req_company_id' },
+        { actionName: 'leaveCompany', idName: 'company_id', requireConfirmation: true },
+        { actionName: 'acceptInvitation', idName: 'company_id' },
+        { actionName: 'declineInvitation', idName: 'company_id' },
+      ],
+      lists: [
+        { actionName: 'listInvites', idName: 'company_id' },
+        { actionName: 'listRequests', idName: 'company_id' },
+      ]
     };
   },
 
@@ -225,113 +159,6 @@ export default {
     
     closeModal() {
       this.isModalVisible = false;
-    },
-
-    async sendRequest() {
-      try {
-        const userId = this.getCurrentUser.id;
-        await axiosInstance.post(`/users/${userId}/send_request/`, { req_company_id: this.companyId });
-        this.showSendRequestForm = false;
-        this.showRequestSection = false;
-        } catch (error) {
-        
-        if (error.response && error.response.status === 404) {
-          this.errorMessage = this.$t('notFoundError');
-        } else {
-          this.errorMessage = this.$t('processError');
-        }
-        console.error('Error sending request:', error);
-      }
-    },
-
-    async revokeRequest() {
-      try {
-        const userId = this.getCurrentUser.id;       
-        await axiosInstance.post(`/users/${userId}/revoke_request/`, { req_company_id: this.companyId });
-        this.showRevokeRequestForm = false;
-        this.showRequestSection = false;
-        } catch (error) {
-        
-        if (error.response && error.response.status === 404) {
-          this.errorMessage = this.$t('notFoundError');
-        } else {
-          this.errorMessage = this.$t('processError');
-        }
-        console.error('Error sending request:', error);
-      }
-    },
-
-    async acceptInvitation() {
-      try {
-        const userId = this.getCurrentUser.id;       
-        await axiosInstance.post(`/users/${userId}/accept_invitation/`, { company_id: this.companyId });
-        this.showAcceptInvitationForm = false;
-        this.showInvitationSection = false;
-        } catch (error) {
-        
-        if (error.response && error.response.status === 404) {
-          this.errorMessage = this.$t('notFoundError');
-        } else {
-          this.errorMessage = this.$t('processError');
-        }
-        console.error('Error acceptinging invitation:', error);
-      }
-    },
-
-    async declineInvitation() {
-      try {
-        const userId = this.getCurrentUser.id;       
-        await axiosInstance.post(`/users/${userId}/decline_invitation/`, { company_id: this.companyId });
-        this.showDeclineInvitationForm = false;
-        this.showInvitationSection = false;
-        } catch (error) {
-        
-        if (error.response && error.response.status === 404) {
-          this.errorMessage = this.$t('notFoundError');
-        } else {
-          this.errorMessage = this.$t('processError');
-        }
-        console.error('Error acceptinging invitation:', error);
-      }
-    },
-
-    async listRequests() {
-      try {
-        const userId = this.getCurrentUser.id;
-        const response = await axiosInstance.get(`/users/${userId}/list_requests/`); 
-        this.userRequests = response.data;
-        this.showListRequests = true;
-      } catch (error) {
-          console.error('Error fetching requests:', error);
-        }
-    },
-
-    async listInvitations() {
-      try {
-        const userId = this.getCurrentUser.id;
-        const response = await axiosInstance.get(`/users/${userId}/list_invites/`); 
-        this.invitations = response.data;
-        this.showListInvitations = true;
-      } catch (error) {
-          console.error('Error fetching invites:', error);
-        }
-    },
-
-    async leaveCompany() {
-      try {
-        const userId = this.getCurrentUser.id;
-        await axiosInstance.post(`/users/${userId}/leave_company/`, { company_id: this.companyId });
-        this.showLeaveCompanyForm = false;
-        this.showRequestSection = false;
-        } catch (error) {
-        
-        if (error.response && error.response.status === 404) {
-          this.errorMessage = this.$t('notFoundError');
-        } else {
-          this.errorMessage = this.$t('processError');
-        }
-        console.error('Error leaving:', error);
-      }
     },
   },
   
