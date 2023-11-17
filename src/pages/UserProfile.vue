@@ -5,8 +5,28 @@
       <router-link to="/">{{ $t('home_link') }}</router-link>
       <input v-model="id" placeholder="User ID">
       <button @click="findId">{{ $t('findUser') }}</button>
-      <button @click="toggleEditMode" v-if="!editMode">{{ $t('editUser') }}</button>
-      
+      <div v-if="isCurrentUser">
+        <button @click="toggleEditMode" v-if="!editMode">{{ $t('editUser') }}</button>
+        
+        <InviteAction
+        v-for="action in actions"
+        :key="action.actionName"
+        :actionName="action.actionName"
+        :idName="action.idName"
+        :byWhom="'users'"
+        :requireConfirmation="action.requireConfirmation"
+        />
+
+        <PaginationComponent
+        v-for="list in lists"
+        :key="list.actionName"
+        :actionName="list.actionName"  
+        :idName="list.idName"
+        :byWhom="'users'"
+        />
+
+      </div>
+
       <div v-if="editMode">
         <textarea v-model="additionalInfo" placeholder="Additional Information"></textarea>
         <input type="file" ref="avatarInput" @change="handleAvatarChange" />
@@ -32,12 +52,15 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
-import ModalWindow from '/app/src/components/ModalWindow.vue'
-
+import ModalWindow from '/app/src/components/ModalWindow.vue';
+import InviteAction from '@/components/InviteAction.vue'
+import PaginationComponent from '@/components/PaginationComponent.vue';
 
 export default {
   components: {
     ModalWindow,
+    InviteAction,
+    PaginationComponent,
   },
   
   data() {
@@ -49,11 +72,33 @@ export default {
       editedUser: null,
       additionalInfo: '',
       selectedAvatar: null,
+      showRequestSection: false,
+      actions: [
+        { actionName: 'sendRequest', idName: 'req_company_id' },
+        { actionName: 'revokeRequest', idName: 'req_company_id' },
+        { actionName: 'leaveCompany', idName: 'company_id', requireConfirmation: true },
+        { actionName: 'acceptInvitation', idName: 'company_id' },
+        { actionName: 'declineInvitation', idName: 'company_id' },
+      ],
+      lists: [
+        { actionName: 'listInvites', idName: 'company_id' },
+        { actionName: 'listRequests', idName: 'company_id' },
+      ]
     };
   },
 
   computed: {
     ...mapGetters(['getUserDetails', 'getCurrentUser']),
+
+    isCurrentUser() {
+        const currentUser = this.getCurrentUser.id; 
+        const foundUser = this.getUserDetails.id; 
+        return currentUser && foundUser && currentUser === foundUser;
+    },
+
+    confirmationMessage() {
+      return this.$t('confirmCompanyLeave');
+    },
   },
   
   methods: {
@@ -62,6 +107,10 @@ export default {
     async findId() {
       const id = this.id;
       this.fetchUserDetails(id);
+    },
+    
+    requestAction() {
+      this.showConfirmationModal = true;
     },
 
     async deleteUser() {
@@ -84,6 +133,7 @@ export default {
     handleAvatarChange() {
       this.selectedAvatar = this.$refs.avatarInput.files[0];
     },
+
     updateAvatar() {
       if (this.selectedAvatar) {
         this.uploadUserAvatar({ userId: this.getUserDetails.id, avatar: this.selectedAvatar })
@@ -96,6 +146,7 @@ export default {
           });
       }
     },
+
     saveChanges() {
       this.editedUser.additional_info = this.additionalInfo    
       this.updateUser(this.editedUser);
@@ -106,7 +157,6 @@ export default {
       this.isModalVisible = true;
     },
     
-
     closeModal() {
       this.isModalVisible = false;
     },
