@@ -126,21 +126,6 @@ export default {
       this[toggleName] = !this[toggleName];
     },
 
-    confirmRemoveUser() {
-      this.confirmationContext = 'removeUser';
-      this.showConfirmationModal = true;
-    },
-
-    confirmAppointAdmin() {
-      this.confirmationContext = 'appointAdmin';
-      this.showConfirmationModal = true;
-    },
-
-    confirmRemoveAdmin() {
-      this.confirmationContext = 'removeAdmin';
-      this.showConfirmationModal = true;
-    },
-
     toggleEditMode() {
       this.editMode = !this.editMode;
       if (this.editMode) {
