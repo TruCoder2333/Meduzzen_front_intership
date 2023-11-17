@@ -32,12 +32,12 @@ import ConfirmationModal from '@/components/ConfirmationModal.vue'
     },
 
     props: {
-      actionName: String,
-      idName: String,
-      byWhom: String,
-      requireConfirmation: {
-      type: Boolean,
-      default: false
+        actionName: String,
+        idName: String,
+        byWhom: String,
+        requireConfirmation: {
+            type: Boolean,
+            default: false
         },
     },
 
@@ -56,16 +56,20 @@ import ConfirmationModal from '@/components/ConfirmationModal.vue'
             const actionNameSnakeCase = snakeCase(this.actionName);
             let id;
             
-            if (this.byWhom === 'company') {
+            switch (this.byWhom) {
+            case 'company':
                 id = this.getCompanyDetails.id;
-            } else if (this.byWhom === 'users') {
+                break;
+            case 'users':
                 id = this.getCurrentUser.id;
-            } else {
-            console.error(`Unexpected byWhom value: ${this.byWhom}`);
-            id = '1'; 
+                break;
+            default:
+                this.$emit('error', `Unexpected byWhom value: ${this.byWhom}`);
+                id = null; 
+                break;
             }
 
-            return `/${this.byWhom}/${id}/${actionNameSnakeCase}/`;
+            return id ? `/${this.byWhom}/${id}/${actionNameSnakeCase}/` : null;
         },
 
         confirmationMessage() {

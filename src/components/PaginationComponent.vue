@@ -5,8 +5,8 @@
       <div v-if="showList">
         <p v-if="errorMessage">{{ errorMessage }}</p>
         <ul>
-          <li v-for="something in list" :key="something.id">
-            {{ something[idName] }} 
+          <li v-for="instance in list" :key="instance.id">
+            {{ instance[idName] }} 
           </li>
         </ul>
         <button @click="showList = false">{{ $t('close') }}</button>
@@ -40,18 +40,20 @@ export default {
         apiUrl() {
             const actionNameSnakeCase = snakeCase(this.actionName);
             let id;
-            
-            if (this.byWhom === 'company') {
+            switch (this.byWhom) {
+            case 'company':
                 id = this.getCompanyDetails.id;
-            } else if (this.byWhom === 'users') {
+                break;
+            case 'users':
                 id = this.getCurrentUser.id;
-            } else {
-                console.error(`Unexpected byWhom value: ${this.byWhom}`);
+                break;
+            default:
                 this.$emit('error', `Unexpected byWhom value: ${this.byWhom}`);
-
+                id = null; 
+                break;
             }
 
-            return `/${this.byWhom}/${id}/${actionNameSnakeCase}/`;
+            return id ? `/${this.byWhom}/${id}/${actionNameSnakeCase}/` : null;
         },
     },
 
