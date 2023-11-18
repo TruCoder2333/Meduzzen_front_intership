@@ -1,5 +1,5 @@
 import { createApp } from 'vue';
-import { createRouter, createWebHashHistory} from 'vue-router';
+import { createRouter, createWebHistory} from 'vue-router';
 import App from './App.vue'
 import i18n from './i18n';
 import store from './store/store'
@@ -14,10 +14,11 @@ const routes = [
   { path: '/company_profile/', component: () => import('./pages/CompanyProfile.vue'), meta: { requiresAuth: true } },
   { path: '/all_companies/', component: () => import('./pages/CompanyList.vue'), meta: { requiresAuth: true } },
   { path: '/health_check/', component: () => import('./pages/HealthCheck.vue')},
+  { path: '/quizzes/:quizId/', component: () => import('./pages/QuizPage.vue'), meta: { requiresAuth: true }}
 ];
 
 const router = createRouter({
-    history: createWebHashHistory(),
+    history: createWebHistory(),
     routes,
     });
 

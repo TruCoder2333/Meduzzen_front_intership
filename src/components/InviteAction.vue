@@ -85,7 +85,6 @@ import ConfirmationModal from '@/components/ConfirmationModal.vue'
             try {
                 const payload = { [this.idName]: this.userId };
                 await axiosInstance.post(this.apiUrl, payload);
-                console.log(`Url: ${this.apiUrl}`);
 
                 this.toggleVisibility('showForm');
             } catch (error) {
@@ -104,7 +103,7 @@ import ConfirmationModal from '@/components/ConfirmationModal.vue'
             } else {
                 this.performAction();
                 }
-            },  
+            }, 
     }
   };
   </script>

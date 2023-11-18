@@ -65,6 +65,23 @@
     "listAdministrators": "List administrators",
     "yes": "Yes",
     "no": "No",
-    "confirm": "Are you sure?"
+    "confirm": "Are you sure?",
+    "listQuizzes": "List quizzes",
+    "title": "Title",
+    "frequency_in_days": "Frequency in Days",
+    "question_text": "Question Text",
+    "answer_text": "Answer Text",
+    "is_correct": "Is correct?",
+    "add_question": "Add question",
+    "add_answer": "Add answer",
+    "min_questions_error": "A quiz must have at least two questions.",
+    "min_answers_error": "A question must have at least two answers.",
+    "create_quiz": "Create quiz",
+    "cancel": "Cancel",
+    "find_quiz": "Find Quiz",
+    "delete_quiz": "Delete Quiz",
+    "edit_quiz": "Edit Quiz",
+    "availableQuizzes": "Available quizzes",
+    "submit": "Submit"
 
 }
