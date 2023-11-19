@@ -33,7 +33,7 @@ export default {
   },
   data() {
     return {
-      quiz: { ...this.initialQuizData } // Clone the initial data
+      quiz: { ...this.initialQuizData } 
     };
   },
   methods: {
@@ -65,6 +65,4 @@ export default {
 };
 </script>
 
-<style>
-/* Add your modal styling here */
-</style>
+

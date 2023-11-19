@@ -6,7 +6,10 @@
         <p v-if="errorMessage">{{ errorMessage }}</p>
         <ul>
           <li v-for="instance in list" :key="instance.id">
-            {{ instance[idName] }} 
+            <span v-for="idName in idNames" :key="idName">
+            {{ instance[idName] }}
+            <span v-if="idNames.length > 1 && idName !== idNames[idNames.length - 1]">, </span>
+            </span>
           </li>
         </ul>
         <button @click="showList = false">{{ $t('close') }}</button>
@@ -22,7 +25,7 @@ import { mapGetters } from 'vuex';
 export default {
     props: {
         actionName: String,
-        idName: String,
+        idNames: Array,
         byWhom: String,
     },
 

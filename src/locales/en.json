@@ -82,6 +82,20 @@
     "delete_quiz": "Delete Quiz",
     "edit_quiz": "Edit Quiz",
     "availableQuizzes": "Available quizzes",
-    "submit": "Submit"
+    "submit": "Submit",
+    "getCompanyAnalytics": "Get Company Analytics",
+    "getUserAnalytics": "Get User Analytics",
+    "fetchData": "Fetch Data",
+    "getAnalyticsOnQuiz": "Get Analytics on Quiz",
+    "showChart": "Show Chart",
+    "getUsersLastTestTime": "Show members",
+    "listCompanies": "List Companies",
+    "getLastPassedQuizzes": "Get Last Passed Quizzes",
+    "myProfile": "My Profile",
+    "getResultsCsv": "Get results in CSV",
+    "getResultsJson": "Get results in JSON",
+    "getUserCsv": "Get user results in CSV",
+    "getUserJson": "Get user results in JSON"
+
 
 }

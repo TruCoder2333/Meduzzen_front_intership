@@ -3,13 +3,7 @@
   <router-link to="/">{{ $t('home_link') }}</router-link>
   <input v-model="id" placeholder="Company ID">
   <button @click="findId">{{ $t('findCompany') }}</button>  
-  <!---<PaginationComponent
-      :actionName="'listQuizzes'"  
-      :idName="'title'"
-      :byWhom="'company'"
-      />-->
-
-  <button @click="fetchQuizzes">{{ $t('listQuizzes') }}</button>
+  <button v-if="getCompanyDetails.id" @click="fetchQuizzes">{{ $t('listQuizzes') }}</button>
   
   <div v-if="showQuizList">
     <h2>{{ $t('availableQuizzes') }}</h2>
@@ -26,6 +20,9 @@
       v-if="!editMode">
       {{ $t('editCompany') }}
     </button>
+
+    <CompanyAnalyticsChart/>
+    <UserAnalyticsChart/>
 
     <button 
       @click="showInvitationSection = !showInvitationSection">
@@ -46,9 +43,18 @@
       v-for="list in lists"
       :key="list.actionName"
       :actionName="list.actionName"  
-      :idName="list.idName"
+      :idNames="list.idName"
       :byWhom="'company'"
       />
+
+      <button @click="downloadAllCsv">{{ $t('getResultsCsv') }}</button>
+      <button @click="downloadAllJson">{{ $t('getResultsJson') }}</button>
+      <button @click="toggleVisibility('showUserExport')">Export User Results</button>
+        <div v-if="showUserExport">
+          <input v-model="userId" placeholder="Enter User ID" />
+          <button @click="downloadUserCsv">{{ $t('getUserCsv') }}</button>
+          <button @click="downloadUserJson">{{ $t('getUserJson') }}</button>
+        </div>
 
     </div>
 
@@ -100,6 +106,8 @@ import PaginationComponent from '@/components/PaginationComponent.vue';
 import QuizCreate from '@/components/QuizCreate.vue';
 import QuizEdit from '@/components/QuizEdit.vue';
 import axiosInstance from '@/utils/axiosInstance';
+import UserAnalyticsChart from '@/components/UserAnalyticsChart.vue';
+import CompanyAnalyticsChart from '@/components/CompanyAnalyticsChart.vue';
 
 export default {
   components: {
@@ -107,6 +115,8 @@ export default {
     PaginationComponent,
     QuizCreate,
     QuizEdit,
+    UserAnalyticsChart,
+    CompanyAnalyticsChart
   },  
 
   data() {
@@ -128,10 +138,10 @@ export default {
         { actionName: 'removeAdministrator', idName: 'user_id', requireConfirmation: true }
       ],
       lists: [
-        { actionName: 'listInvitations', idName: 'invited_user_id' },
-        { actionName: 'listRequests', idName: 'invited_user_id' },
-        { actionName: 'listMembers', idName: 'username' },
-        { actionName: 'listAdministrators', idName: 'username' },
+        { actionName: 'listInvitations', idName: ['invited_user_id'] },
+        { actionName: 'listRequests', idName: ['invited_user_id'] },
+        { actionName: 'getUsersLastTestTime', idName: ['username', 'last_test_time'] },
+        { actionName: 'listAdministrators', idName: ['username'] },
       ],
       showQuizCreationModal: false,
       showQuizEditModal: false,
@@ -139,7 +149,9 @@ export default {
       foundQuiz: null,
       currentQuizForEdit: null,
       quizzes: [],
-      showQuizList: false
+      showQuizList: false,
+      userId: '',
+      showUserExport: false
     };
   },
 
@@ -235,7 +247,80 @@ export default {
             this.errorMessage = this.$t('process_error');
             console.error('Error fetching requests:', error);
         }
+    },
+
+    async downloadAllCsv() {
+      try {
+        const response = await axiosInstance.get(`/company/${this.getCompanyDetails.id}/members-results/export-csv/`, {
+          responseType: 'blob' 
+        });
+
+      const file = new Blob([response.data], {type: 'text/csv'});
+
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(file);
+      link.download = 'company_quiz_results.csv'; 
+      link.click();
+      URL.revokeObjectURL(link.href); 
+      } catch (error) {
+        console.error('Error downloading CSV:', error);
       }
+    },
+
+    async downloadUserCsv() {
+      try {
+        console.log("An id:", this.userId)
+        const response = await axiosInstance.get(`/company/${this.getCompanyDetails.id}/member-results/export-csv/${this.userId}/`, {
+          responseType: 'blob' 
+        });
+      console.log("An id:", this.userId)
+      const file = new Blob([response.data], {type: 'text/csv'});
+
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(file);
+      link.download = 'user_quiz_results.csv'; 
+      link.click();
+      URL.revokeObjectURL(link.href); 
+      } catch (error) {
+        console.error('Error downloading CSV:', error);
+      }
+    },
+
+    async downloadAllJson() {
+      try {
+        const response = await axiosInstance.get(`/company/${this.getCompanyDetails.id}/members-results/export-json/`, {
+          responseType: 'blob' 
+        });
+
+      const file = new Blob([response.data], {type: 'application/json'});
+
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(file);
+      link.download = 'company_quiz_results.json'; 
+      link.click();
+      URL.revokeObjectURL(link.href); // Clean up
+      } catch (error) {
+        console.error('Error downloading JSON:', error);
+      }
+    },
+
+    async downloadUserJson() {
+      try {
+        const response = await axiosInstance.get(`/company/${this.getCompanyDetails.id}/member-results/export-json/${this.userId}/`, {
+          responseType: 'blob' 
+        });
+
+      const file = new Blob([response.data], {type: 'application/json'});
+
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(file);
+      link.download = 'company_quiz_results.json'; 
+      link.click();
+      URL.revokeObjectURL(link.href); // Clean up
+      } catch (error) {
+        console.error('Error downloading JSON:', error);
+      }
+    },
   }
 };
 </script>

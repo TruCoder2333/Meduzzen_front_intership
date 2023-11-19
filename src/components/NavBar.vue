@@ -19,12 +19,13 @@ export default {
   data() {
     return {
       links: ['about',
-             'signUp', 
-             'signIn', 
-             'allUsers', 
-             'userProfile', 
-             'companyProfile', 
-             'allCompanies'],
+              'myProfile',
+              'signUp', 
+              'signIn', 
+              'allUsers', 
+              'userProfile', 
+              'companyProfile', 
+              'allCompanies'],
       snakeCase: null,
     };
   },

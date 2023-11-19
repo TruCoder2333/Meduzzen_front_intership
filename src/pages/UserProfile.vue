@@ -21,7 +21,7 @@
         v-for="list in lists"
         :key="list.actionName"
         :actionName="list.actionName"  
-        :idName="list.idName"
+        :idNames="list.idNames"
         :byWhom="'users'"
         />
 
@@ -81,8 +81,8 @@ export default {
         { actionName: 'declineInvitation', idName: 'company_id' },
       ],
       lists: [
-        { actionName: 'listInvites', idName: 'company_id' },
-        { actionName: 'listRequests', idName: 'company_id' },
+        { actionName: 'listInvites', idNames: ['company_id'] },
+        { actionName: 'listRequests', idNames: ['company_id'] },
       ]
     };
   },
