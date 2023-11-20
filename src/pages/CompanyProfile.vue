@@ -49,7 +49,7 @@
 
       <button @click="downloadAllCsv">{{ $t('getResultsCsv') }}</button>
       <button @click="downloadAllJson">{{ $t('getResultsJson') }}</button>
-      <button @click="toggleVisibility('showUserExport')">Export User Results</button>
+      <button @click="toggleVisibility('showUserExport')">{{ $t('exportUserResults') }}</button>
         <div v-if="showUserExport">
           <input v-model="userId" placeholder="Enter User ID" />
           <button @click="downloadUserCsv">{{ $t('getUserCsv') }}</button>
@@ -61,7 +61,7 @@
   </div>
         
   <div v-if="editMode">
-    <textarea v-model="additionalInfo" placeholder="Description"></textarea>
+    <textarea v-model="additionalInfo" :placeholder="$t('description')"></textarea>
     <button @click="saveChanges" >{{ $t('save') }}</button>
     <button @click="deleteComp"  class="delete-button">{{ $t('deleteCompany') }}</button>
     <button @click="showQuizCreationModal = true">{{ $t('create_quiz') }}</button>
@@ -71,14 +71,14 @@
       @update:isVisible="showQuizCreationModal = $event"
       @quizCreated="fetchQuizzes" 
     />
-    <input v-model="quizId" placeholder="Enter Quiz ID" />
-    <button @click="findQuiz">{{ 'find_quiz' }}</button>
+    <input v-model="quizId" :placeholder="$t('enterQuizId')" />
+    <button @click="findQuiz">{{ $t('findQuiz') }}</button>
 
     <div v-if="foundQuiz">
       <h3>{{ foundQuiz.title }}</h3>
       <p>{{ foundQuiz.description }}</p>
 
-      <button @click="openQuizEditModal(foundQuiz)">{{ 'edit_quiz' }}</button>
+      <button @click="openQuizEditModal(foundQuiz)">{{ $t('editQuiz') }}</button>
 
       <QuizEdit
         :isVisible="showQuizEditModal"
@@ -86,7 +86,7 @@
         @quizEdited="handleQuizEdited"
         @update:isVisible="showQuizEditModal = $event"
       />
-      <button @click="deleteQuiz(foundQuiz.id)">{{ 'delete_quiz' }}</button>
+      <button @click="deleteQuiz(foundQuiz.id)">{{ $t('deleteQuiz') }}</button>
     </div>
   </div>
   

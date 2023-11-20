@@ -35,8 +35,9 @@
         <p>{{ $t('additionalInfo') }}: {{ getCurrentUser.additionalInfo }}</p>
         <RatingsComponent :rating="averageOverallScore" :max="5" />
         <UserByQuizAnalyticsChart />
-        <button @click="downloadCsv">{{ $t('getResultsCSV') }}</button>
-        <button @click="downloadJson">{{ $t('getResultsJSON') }}</button>
+        <NotificationsList />
+        <button @click="downloadCsv">{{ $t('getResultsCsv') }}</button>
+        <button @click="downloadJson">{{ $t('getResultsJson') }}</button>
 
 
     </div>
@@ -57,6 +58,7 @@ import PaginationComponent from '@/components/PaginationComponent.vue';
 import RatingsComponent from '@/components/RatingsComponent.vue';
 import axiosInstance from '@/utils/axiosInstance';
 import UserByQuizAnalyticsChart from '@/components/UserByQuizAnalyticsChart.vue';
+import NotificationsList from '@/components/NotificationsList.vue';
 
 export default {
   components: {
@@ -65,6 +67,7 @@ export default {
     PaginationComponent,
     RatingsComponent,
     UserByQuizAnalyticsChart,
+    NotificationsList,
 },
   
   data() {

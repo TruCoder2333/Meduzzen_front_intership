@@ -4,6 +4,8 @@
     <header>
       <h4>{{ getCurrentUser.username }}</h4>
       <h4>{{ getCurrentUser.email }}</h4>
+      <NotificationComponent ref="notification" />
+
       <NavBar />
     </header>
     <select v-model="selectedLanguage">
@@ -22,32 +24,51 @@
 import NavBar from '/app/src/components/NavBar.vue' 
 import store from './store/store'
 import { mapGetters, mapActions } from 'vuex';
+import NotificationComponent from './components/NotificationComponent.vue';
+import { eventBus } from './utils/eventBus';
+import connectWebSocket from './utils/websocket.js';
 
 export default {
+  components: {
+      NavBar,
+      NotificationComponent,
+    },
+  
   data() {
     return {
       selectedLanguage: store.state.locale,
     };
   },
   
-  components: {
-      NavBar,
-    },
+  computed: {
+    ...mapGetters(['getCurrentUser', 'getTestString']),
+  },
+
   watch: {
     selectedLanguage(newLang) {
       this.$i18n.locale = newLang;
       store.commit('setLocale', newLang)
     },
   },
-  computed: {
-    ...mapGetters(['getCurrentUser', 'getTestString']),
-  },
+  
   methods: {
     ...mapActions(['updateTestString']),
     changeTestString() {
       this.updateTestString('New Test String');
     },
+    handleNewNotification(message) {
+      this.$refs.notification.displayNotification(message);
+    },
   },
+  
+  mounted() {
+    connectWebSocket();
+    eventBus.on('new-notification', this.handleNewNotification);
+  },
+  unmounted() {
+    eventBus.off('new-notification', this.handleNewNotification);
+  },
+  
   };
 
   </script>

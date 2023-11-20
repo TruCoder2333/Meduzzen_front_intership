@@ -78,9 +78,10 @@
     "min_answers_error": "A question must have at least two answers.",
     "create_quiz": "Create quiz",
     "cancel": "Cancel",
-    "find_quiz": "Find Quiz",
-    "delete_quiz": "Delete Quiz",
-    "edit_quiz": "Edit Quiz",
+    "findQuiz": "Find Quiz",
+    "enterQuizID": "Enter Quiz ID",
+    "deleteQuiz": "Delete Quiz",
+    "editQuiz": "Edit Quiz",
     "availableQuizzes": "Available quizzes",
     "submit": "Submit",
     "getCompanyAnalytics": "Get Company Analytics",
@@ -95,7 +96,9 @@
     "getResultsCsv": "Get results in CSV",
     "getResultsJson": "Get results in JSON",
     "getUserCsv": "Get user results in CSV",
-    "getUserJson": "Get user results in JSON"
+    "getUserJson": "Get user results in JSON",
+    "exportUserResults": "Export User Results",
+    "getAllNotifications": "See all notifications"
 
 
 }

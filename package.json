@@ -20,5 +20,22 @@
     "@vue/cli-service": "~5.0.0",
     "eslint": "^7.32.0",
     "eslint-plugin-vue": "^8.0.3"
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "vue"
+    ],
+    "transform": {
+      ".*\\.(vue)$": "vue-jest",
+      "^.+\\.js$": "babel-jest"
+    },
+    "collectCoverage": true,
+    "collectCoverageFrom": [
+      "src/**/*.{js,vue}",
+      "!**/node_modules/**"
+    ],
+    "coverageReporters": ["html", "text-summary"]
   }
 }
