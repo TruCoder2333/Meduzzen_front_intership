@@ -98,7 +98,7 @@
     "getUserCsv": "Get user results in CSV",
     "getUserJson": "Get user results in JSON",
     "exportUserResults": "Export User Results",
-    "getAllNotifications": "See all notifications"
-
+    "getAllNotifications": "See all notifications",
+    "enterUserId": "Enter User ID"
 
 }

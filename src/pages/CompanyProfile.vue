@@ -51,7 +51,7 @@
       <button @click="downloadAllJson">{{ $t('getResultsJson') }}</button>
       <button @click="toggleVisibility('showUserExport')">{{ $t('exportUserResults') }}</button>
         <div v-if="showUserExport">
-          <input v-model="userId" placeholder="Enter User ID" />
+          <input v-model="userId" :placeholder="$t('enterUserId')" />
           <button @click="downloadUserCsv">{{ $t('getUserCsv') }}</button>
           <button @click="downloadUserJson">{{ $t('getUserJson') }}</button>
         </div>
@@ -65,9 +65,9 @@
     <button @click="saveChanges" >{{ $t('save') }}</button>
     <button @click="deleteComp"  class="delete-button">{{ $t('deleteCompany') }}</button>
     <button @click="showQuizCreationModal = true">{{ $t('create_quiz') }}</button>
-    <QuizCreate 
-      :isVisible="showQuizCreationModal" 
-      :companyId="getCompanyDetails.id"
+    <QuizForm 
+      :isVisible="showQuizCreationModal"
+      :initialQuizData=null 
       @update:isVisible="showQuizCreationModal = $event"
       @quizCreated="fetchQuizzes" 
     />
@@ -80,7 +80,7 @@
 
       <button @click="openQuizEditModal(foundQuiz)">{{ $t('editQuiz') }}</button>
 
-      <QuizEdit
+      <QuizForm
         :isVisible="showQuizEditModal"
         :initialQuizData="foundQuiz"
         @quizEdited="handleQuizEdited"
@@ -103,8 +103,7 @@
 import { mapGetters, mapActions } from 'vuex';
 import InviteAction from '@/components/InviteAction.vue'
 import PaginationComponent from '@/components/PaginationComponent.vue';
-import QuizCreate from '@/components/QuizCreate.vue';
-import QuizEdit from '@/components/QuizEdit.vue';
+import QuizForm from '@/components/QuizForm.vue';
 import axiosInstance from '@/utils/axiosInstance';
 import UserAnalyticsChart from '@/components/UserAnalyticsChart.vue';
 import CompanyAnalyticsChart from '@/components/CompanyAnalyticsChart.vue';
@@ -113,8 +112,7 @@ export default {
   components: {
     InviteAction,
     PaginationComponent,
-    QuizCreate,
-    QuizEdit,
+    QuizForm,
     UserAnalyticsChart,
     CompanyAnalyticsChart
   },  

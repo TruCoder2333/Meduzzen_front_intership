@@ -96,6 +96,7 @@
     "getUserCsv": "Отримати результати користувача в CSV",
     "getUserJson": "Отримати результати користувача в JSON",
     "exportUserResults": "Завантажити результати користувача",
-    "getAllNotifications": "Усі сповіщення"
+    "getAllNotifications": "Усі сповіщення",
+    "enterUserId": "Введіть айді користувача"
 
 }
